@@ -6,11 +6,14 @@ git log - посмотрел логи
 git add Acceptor.java - добавил файл в отслеживание
 git commit -m "Created class Acceptor"- сделал коммит
 git status - проверил статус
+git add Acceptor.java - Добавит файл в список файлов подготовленных для коммита
 git commit -m "Init class Acceptor" - сделал коммит
 git status - проверил статус
 git add BanknoteAcceptor.java- добавил файл в отслеживание
 git commit -m "Create class BanknoteAcceptor and init" - сделал коммит
 git status - проверил статус
+git add CoinAcceptor.java- Добавит файл в список файлов подготовленных для коммита
 git commit -m "Change class CoinAcceptor" - сделал коммит
+git add commands.txt - Добавит файл в список файлов подготовленных для коммита
 git commit -m "changed the logic of the acceptors" - сделал коммит
 
