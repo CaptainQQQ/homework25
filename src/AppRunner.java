@@ -9,7 +9,9 @@ public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
 
-    private final CoinAcceptor coinAcceptor;
+    private final UniversalArray<Acceptor> acceptors = new UniversalArrayImpl<>();
+
+    private Acceptor acceptor;
 
     private static boolean isExit = false;
 
@@ -22,7 +24,10 @@ public class AppRunner {
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        coinAcceptor = new CoinAcceptor(100);
+        acceptors.addAll(new Acceptor[] {
+                new CoinAcceptor(100),
+                new BanknoteAcceptor(1000)
+        });
     }
 
     public static void run() {
@@ -36,7 +41,15 @@ public class AppRunner {
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + coinAcceptor.getAmount());
+        print("Монет на сумму: " + acceptors.get(0).getAmount());
+        print("Купюр на сумму: " + acceptors.get(1).getAmount());
+
+        print("""
+                Способ оплаты:
+                1 - Монеты
+                2 - Купюра""");
+        acceptor = chooseAcceptor(acceptors);
+
 
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         allowProducts.addAll(getAllowedProducts().toArray());
@@ -47,11 +60,28 @@ public class AppRunner {
     private UniversalArray<Product> getAllowedProducts() {
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         for (int i = 0; i < products.size(); i++) {
-            if (coinAcceptor.getAmount() >= products.get(i).getPrice()) {
+            if (acceptor.getAmount() >= products.get(i).getPrice()) {
                 allowProducts.add(products.get(i));
             }
         }
         return allowProducts;
+    }
+
+    private Acceptor chooseAcceptor(UniversalArray<Acceptor> acceptors) {
+        int index;
+        while (true) {
+            try {
+                index = Integer.parseInt(fromConsole());
+                if (index > acceptors.size() || index < 0){
+                    throw new NumberFormatException();
+                }
+                break;
+            } catch (NumberFormatException nfe){
+                nfe = new NumberFormatException("Ошибка!");
+                print(nfe.getMessage());
+            }
+        }
+        return acceptors.get(index-1);
     }
 
     private void chooseAction(UniversalArray<Product> products) {
@@ -61,7 +91,7 @@ public class AppRunner {
         try {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
-                    coinAcceptor.setAmount(coinAcceptor.getAmount() - products.get(i).getPrice());
+                    acceptor.setAmount(acceptor.getAmount() - products.get(i).getPrice());
                     print("Вы купили " + products.get(i).getName());
                     break;
                 } else if ("h".equalsIgnoreCase(action)) {
