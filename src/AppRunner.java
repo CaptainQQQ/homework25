@@ -77,8 +77,8 @@ public class AppRunner {
                 }
                 break;
             } catch (NumberFormatException nfe){
-                nfe = new NumberFormatException("Ошибка!");
-                print(nfe.getMessage());
+                NumberFormatException numberFormatException = new NumberFormatException("Ошибка!");
+                print(numberFormatException.getMessage());
             }
         }
         return acceptors.get(index-1);
